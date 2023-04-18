@@ -1,0 +1,17 @@
+ <soundDevices>
+    <soundDevice>
+        <name>Name 1</name>
+        <ipAddress>192.168.0.101</ipAddress>
+        <status>PROCESS</status>
+    </soundDevice>
+    <soundDevice>
+        <name>Name 2</name>
+        <ipAddress>192.168.0.102</ipAddress>
+        <status>PROCESS</status>
+    </soundDevice>
+    <soundDevice>
+        <name>Name 3</name>
+        <ipAddress>192.168.0.103</ipAddress>
+        <status>PROCESS</status>
+    </soundDevice>
+</soundDevices>
