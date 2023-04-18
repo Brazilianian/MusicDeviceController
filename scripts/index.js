@@ -3,11 +3,13 @@ const TABLE_ID = 'soundDevicesTable'
 
 let soundDevices = []
 
-async function getDataAndFillTable() {
-    soundDevices = await getSoundDevicesFromFile(FILE_PATH)
-
-    fillTableColumnsNames(TABLE_ID)
-    updatedTable(soundDevices, TABLE_ID)
+function getDataAndFillTable() {
+    getSoundDevicesFromFile(FILE_PATH)
+        .then(soundDevicesFromFile => {
+            soundDevices = soundDevicesFromFile
+            fillTableColumnsNames(TABLE_ID)
+            updatedTable(soundDevices, TABLE_ID)
+        })
 }
 
 async function getSoundDevicesFromFile(filePath) {
@@ -24,11 +26,12 @@ function getConnectionStateInfo() {
     }
 }
 
-function getPlayerStatusInfo(){
+function getPlayerStatusInfo() {
     for (const soundDevice of soundDevices) {
         getPlayerStatus(soundDevice.ipAddress)
-            .then(response => {
-                soundDevice.status = response
+            .then(playbackStatus => {
+                soundDevice.mode = playbackStatus.type
+                soundDevice.volume = playbackStatus.vol
             })
     }
 }

@@ -3,8 +3,10 @@ function fillTableColumnsNames(tableId) {
     let trTitle = document.createElement('tr')
 
     addThToTr(trTitle, 'Name')
-    addThToTr(trTitle, 'Ip address')
+    addThToTr(trTitle, 'Ip Address')
     addThToTr(trTitle, 'Status')
+    addThToTr(trTitle, 'Playback Mode')
+    addThToTr(trTitle, 'Volume')
 
     tableElement.appendChild(trTitle)
 }

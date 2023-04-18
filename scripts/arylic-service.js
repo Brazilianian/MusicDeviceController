@@ -10,9 +10,47 @@ async function getConnectionStatus(ipAddress) {
 async function getPlayerStatus(ipAddress) {
     let url = getRequestUrl(ipAddress, 'getPlayerStatus')
     try {
-        return await sendHttpRequest(url, ipAddress)
+        let type = await sendHttpRequest(url, ipAddress)
+        type.mode = getPlaybackModeName(type.mode)
+        return type
     } catch (err) {
-        throw err
+        return {
+            type: "FAIL",
+            vol: 0
+        }
+    }
+}
+
+function getPlaybackModeName(number) {
+    switch (number) {
+        case 0:
+            return "Idling"
+        case 1:
+            return "Airplay streaming"
+        case 2:
+            return "DLNA streaming"
+        case 10:
+            return "Playing network content"
+        case 11:
+            return "Playing from local USB disk"
+        case 20:
+            return "Playback start by HTTP API"
+        case 31:
+            return "Spotify content streaming"
+        case 40:
+            return "Line-in input mode"
+        case 41:
+            return "Bluetooth input mode"
+        case 43:
+            return "Optical input mode"
+        case 47:
+            return "Line-in #2 input mode"
+        case 51:
+            return "USB DAC input mode"
+        case 99:
+            return "The device is a guest in a Multiroom Zone"
+        default:
+            return "Unknown mode"
     }
 }
 
