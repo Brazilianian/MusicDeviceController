@@ -21,9 +21,6 @@ async function getPlaybackStatus(ipAddress) {
         return {
             type: "FAIL",
             vol: 0,
-            Title: "",
-            Artist: "",
-            Album: ""
         }
     }
 }
