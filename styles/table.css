@@ -1,0 +1,20 @@
+table {
+    border: black 2px solid;
+    border-radius: 10px;
+    width: 90%;
+    padding: 2px;
+    color: white;
+    background-color: black;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #838383;
+}
+
+tr:nth-child(even) {background-color: #494747;}

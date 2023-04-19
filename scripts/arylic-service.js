@@ -54,6 +54,26 @@ function getPlaybackModeName(number) {
     }
 }
 
+function playPrevious(ipAddress) {
+    let url = getRequestUrl(ipAddress, 'setPlayerCmd:prev')
+    sendHttpRequest(url, 'GET')
+}
+
+function playNext(ipAddress) {
+    let url = getRequestUrl(ipAddress, 'setPlayerCmd:next')
+    sendHttpRequest(url, 'GET')
+}
+
+function pausePlay(ipAddress) {
+    let url = getRequestUrl(ipAddress, 'setPlayerCmd:onepause')
+    sendHttpRequest(url, 'GET')
+}
+
+function changeVolume(ipAddress, volume) {
+    let url = getRequestUrl(ipAddress, `setPlayerCmd:vol:${volume}`)
+    sendHttpRequest(url, 'GET')
+}
+
 function getRequestUrl(ipAddress, commandName, commandOptions) {
     let url = `http://${ipAddress}/httpapi.asp`
     if (typeof commandName === "undefined") {

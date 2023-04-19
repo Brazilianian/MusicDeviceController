@@ -38,10 +38,10 @@ function getPlayerStatusInfo() {
 
 getDataAndFillTable()
 
-setInterval(function () {
-    getConnectionStateInfo()
-    getPlayerStatusInfo()
-
-    updatedTable(soundDevices, TABLE_ID)
-
-}, 10 * 1000)
+// setInterval(function () {
+//     getConnectionStateInfo()
+//     getPlayerStatusInfo()
+//
+//     updatedTable(soundDevices, TABLE_ID)
+//
+// }, 10 * 1000)
