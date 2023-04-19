@@ -1,3 +1,7 @@
+/**
+ * Gets table by id and adds table's headers
+ * @param {string} tableId - id of table in index.html
+ */
 function fillTableColumnsNames(tableId) {
     let tableElement = document.getElementById(tableId)
     let trTitle = document.createElement('tr')
@@ -13,6 +17,11 @@ function fillTableColumnsNames(tableId) {
     tableElement.appendChild(trTitle)
 }
 
+/**
+ * Clears the table row's and fills again
+ * @param {soundDevices} soundDevices - sound devices data fill in table
+ * @param {string} tableId - id of table in index.html
+ */
 function updateTable(soundDevices, tableId) {
     clearTable(tableId)
 
@@ -31,6 +40,10 @@ function updateTable(soundDevices, tableId) {
     })
 }
 
+/**
+ * Clears the table
+ * @param {string} tableId - id of table in index.html
+ */
 function clearTable(tableId) {
     let table = document.getElementById(tableId);
     let rows = table.getElementsByTagName("tr");
@@ -39,6 +52,11 @@ function clearTable(tableId) {
     }
 }
 
+/**
+ * In dependency of sound device's status changes disabled option of controls
+ * Also changes the volume bar value
+ * @param {soundDevices} soundDevices
+ */
 function updateControls(soundDevices) {
 
     soundDevices.forEach(soundDevice => {
@@ -51,12 +69,22 @@ function updateControls(soundDevices) {
     })
 }
 
+/**
+ * Changes disabled status of sound device
+ * @param {boolean} isDisabled - true/false disabled status
+ * @param {string} ipAddress - ipAddress of sound device
+ */
 function setDisabledStatusControlButtons(isDisabled, ipAddress) {
     //todo split button
     document.getElementById(`play-pause-${ipAddress}`).disabled = isDisabled
     document.getElementById(`volume-bar-${ipAddress}`).disabled = isDisabled
 }
 
+/**
+ * Adds the controls elements to assigned table's row
+ * @param {HTMLTableRowElement} tr - table row element to add controls
+ * @param {string} ipAddress - ip address of sound device
+ */
 function addControlsToTr(tr, ipAddress) {
     let tdControls = document.createElement('td')
 
@@ -102,6 +130,12 @@ function addControlsToTr(tr, ipAddress) {
     tr.appendChild(tdControls)
 }
 
+/**
+ * Create table's cell and adds to row
+ * @param {HTMLTableRowElement} tr
+ * @param {string} thName
+ * @returns {HTMLTableRowElement}
+ */
 function addThToTr(tr, thName) {
     let th = document.createElement('th')
     th.innerText = thName
@@ -110,6 +144,12 @@ function addThToTr(tr, thName) {
     return tr
 }
 
+/**
+ *
+ * @param {HTMLTableRowElement} tr
+ * @param {string} tdName
+ * @returns {HTMLTableRowElement}
+ */
 function addTdToTr(tr, tdName) {
     let td = document.createElement('td')
     td.innerText = tdName

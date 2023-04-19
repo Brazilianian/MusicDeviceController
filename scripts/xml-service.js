@@ -1,3 +1,8 @@
+/**
+ * Reads the data from .xml file and return XmlDom
+ * @param {string} filePath - file path of .xml file
+ * @returns {Promise<Document>}
+ */
 async function getXmlDomFromFile(filePath) {
     let xmlData = await fetch(filePath).then( async (response) => {
         return await response.text();
@@ -7,6 +12,12 @@ async function getXmlDomFromFile(filePath) {
     return parse.parseFromString(xmlData, 'application/xml')
 }
 
+/**
+ * Gets and return array of objects from xml Document
+ * @param {Document} xmlDom - xml Document
+ * @param {string} selectors - root selector of xml structure
+ * @returns {*[]}
+ */
 function getDataFromXmlDom(xmlDom, selectors) {
     let data = []
 

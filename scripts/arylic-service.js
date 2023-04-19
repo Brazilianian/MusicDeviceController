@@ -1,3 +1,8 @@
+/**
+ * Returns status of the sound device
+ * @param {string} ipAddress - ip address of sound device
+ * @returns {Promise<string>} - status of sound device
+ */
 async function getConnectionStatus(ipAddress) {
     let url = getRequestUrl(ipAddress, 'wlanGetConnectState')
     try {
@@ -7,6 +12,11 @@ async function getConnectionStatus(ipAddress) {
     }
 }
 
+/**
+ *
+ * @param {string} ipAddress - ip address of sound device
+ * @returns {Promise<PlayerStatus>} - for details look https://developer.arylic.com/httpapi/#playback-status
+ */
 async function getPlaybackStatus(ipAddress) {
     let url = getRequestUrl(ipAddress, 'getPlayerStatus')
     try {
@@ -25,6 +35,11 @@ async function getPlaybackStatus(ipAddress) {
     }
 }
 
+/**
+ * Return the playback mode's name by it number
+ * @param {number} number
+ * @returns {string}
+ */
 function getPlaybackModeName(number) {
     switch (number) {
         case 0:
@@ -58,6 +73,11 @@ function getPlaybackModeName(number) {
     }
 }
 
+/**
+ * Parse the hexadecimal string to text
+ * @param {string} hexString - the string in hexadecimal format
+ * @returns {string}
+ */
 function fromHexToString(hexString) {
     let str = "";
     for (let i = 0; i < hexString.length; i += 2) {
@@ -69,26 +89,30 @@ function fromHexToString(hexString) {
     return str
 }
 
-function playPrevious(ipAddress) {
-    let url = getRequestUrl(ipAddress, 'setPlayerCmd:prev')
-    sendHttpRequest(url, 'GET')
-}
 
-function playNext(ipAddress) {
-    let url = getRequestUrl(ipAddress, 'setPlayerCmd:next')
-    sendHttpRequest(url, 'GET')
-}
-
+//todo split
 function pausePlay(ipAddress) {
     let url = getRequestUrl(ipAddress, 'setPlayerCmd:onepause')
     sendHttpRequest(url, 'GET')
 }
 
+/**
+ * Changes volume of the sound device
+ * @param {string} ipAddress - ip address of sound device
+ * @param {number} volume - volume to set in range 0..100
+ */
 function changeVolume(ipAddress, volume) {
     let url = getRequestUrl(ipAddress, `setPlayerCmd:vol:${volume}`)
     sendHttpRequest(url, 'GET')
 }
 
+/**
+ * Creates the request url
+ * @param ipAddress - ip address of sound device
+ * @param commandName - name of command (optional)
+ * @param commandOptions - addition options (optional)
+ * @returns {string}
+ */
 function getRequestUrl(ipAddress, commandName, commandOptions) {
     let url = `http://${ipAddress}/httpapi.asp`
     if (typeof commandName === "undefined") {
@@ -107,6 +131,13 @@ function getRequestUrl(ipAddress, commandName, commandOptions) {
     return url
 }
 
+/**
+ * Sends the http request to sound device
+ * Use the url from the getRequestUrl() function
+ * @param {string} url
+ * @param {string} httpType - GET, POST, DELETE etc.
+ * @returns {Promise<unknown>}
+ */
 function sendHttpRequest(url, httpType) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
