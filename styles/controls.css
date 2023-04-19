@@ -4,6 +4,7 @@ button {
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 50%;
+    margin-right: 5px;
 }
 
 .previous {
@@ -37,6 +38,7 @@ button {
 }
 
 .div-volume {
+    margin-top: 5px;
     display: flex;
     justify-content: left;
     align-items: center;

@@ -7,16 +7,23 @@ async function getConnectionStatus(ipAddress) {
     }
 }
 
-async function getPlayerStatus(ipAddress) {
+async function getPlaybackStatus(ipAddress) {
     let url = getRequestUrl(ipAddress, 'getPlayerStatus')
     try {
-        let type = await sendHttpRequest(url, ipAddress)
-        type.mode = getPlaybackModeName(type.mode)
-        return type
+        let playerStatus = await sendHttpRequest(url, ipAddress)
+        playerStatus.mode = getPlaybackModeName(playerStatus.mode)
+        playerStatus.Title = fromHexToString(playerStatus.Title.toString())
+        playerStatus.Artist = fromHexToString(playerStatus.Artist.toString())
+        playerStatus.Album = fromHexToString(playerStatus.Album.toString())
+
+        return playerStatus
     } catch (err) {
         return {
             type: "FAIL",
-            vol: 0
+            vol: 0,
+            Title: "",
+            Artist: "",
+            Album: ""
         }
     }
 }
@@ -52,6 +59,17 @@ function getPlaybackModeName(number) {
         default:
             return "Unknown mode"
     }
+}
+
+function fromHexToString(hexString) {
+    let str = "";
+    for (let i = 0; i < hexString.length; i += 2) {
+        const hex = hexString.substr(i, 2);
+        const charCode = parseInt(hex, 16);
+        str += String.fromCharCode(charCode);
+    }
+
+    return str
 }
 
 function playPrevious(ipAddress) {
@@ -111,5 +129,4 @@ function sendHttpRequest(url, httpType) {
 
         xhr.send()
     })
-
 }

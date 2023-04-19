@@ -3,13 +3,32 @@ const TABLE_ID = 'soundDevicesTable'
 
 let soundDevices = []
 
-function getDataAndFillTable() {
+function getSoundDevicesFromFileAndFillTable() {
     getSoundDevicesFromFile(FILE_PATH)
         .then(soundDevicesFromFile => {
             soundDevices = soundDevicesFromFile
+
             fillTableColumnsNames(TABLE_ID)
-            updatedTable(soundDevices, TABLE_ID)
+            updateTable(soundDevices, TABLE_ID)
+            updateControls(soundDevices)
         })
+}
+
+function getAndUpdateStatusInfo() {
+    getConnectionStateInfo()
+
+    updateTableAndControls()
+}
+
+function getAndUpdatePlaybackInfo() {
+    getPlaybackInfo()
+
+    updateTableAndControls()
+}
+
+function updateTableAndControls() {
+    updateTable(soundDevices, TABLE_ID)
+    updateControls(soundDevices)
 }
 
 async function getSoundDevicesFromFile(filePath) {
@@ -26,22 +45,42 @@ function getConnectionStateInfo() {
     }
 }
 
-function getPlayerStatusInfo() {
+function getPlaybackInfo() {
     for (const soundDevice of soundDevices) {
-        getPlayerStatus(soundDevice.ipAddress)
+        getPlaybackStatus(soundDevice.ipAddress)
             .then(playbackStatus => {
                 soundDevice.mode = playbackStatus.type
                 soundDevice.volume = playbackStatus.vol
+
+                if (typeof playbackStatus.Title === 'undefined') {
+                    soundDevice.track = '...'
+                } else {
+                    soundDevice.track = `'${playbackStatus.Title}' - ${playbackStatus.Artist} | ${playbackStatus.Album}`
+                }
             })
     }
 }
 
-getDataAndFillTable()
+function activateTimers() {
+    //update status 10 seconds
+    setInterval(function () {
+        getAndUpdateStatusInfo()
+    }, 10 * 1000)
 
-// setInterval(function () {
-//     getConnectionStateInfo()
-//     getPlayerStatusInfo()
-//
-//     updatedTable(soundDevices, TABLE_ID)
-//
-// }, 10 * 1000)
+    // update playback mode, volume, track info every 1 second
+    setInterval(function () {
+        getAndUpdatePlaybackInfo()
+    }, 1000)
+}
+
+getSoundDevicesFromFileAndFillTable()
+
+getAndUpdateStatusInfo()
+
+activateTimers()
+
+
+
+
+
+

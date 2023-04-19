@@ -8,13 +8,19 @@ table {
 }
 
 th, td {
-    padding: 15px;
+    padding: 5px 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+}
+
+td {
+    border-right: #cccccc 1px solid;
 }
 
 th {
     background-color: #838383;
 }
 
-tr:nth-child(even) {background-color: #494747;}
+tr:nth-child(even) {
+    background-color: #494747;
+}
