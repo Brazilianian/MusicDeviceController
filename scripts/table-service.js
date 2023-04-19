@@ -29,11 +29,15 @@ function updateTable(soundDevices, tableId) {
 
     soundDevices.forEach(soundDevice => {
         let tr = document.createElement('tr')
-        Object.keys(soundDevice).forEach(key => {
-            addTdToTr(tr, soundDevice[key])
-        })
 
-        addControlsToTr(tr, soundDevice.ipAddress)
+        addTdToTr(tr, soundDevice.name)
+        addTdToTr(tr, soundDevice.ipAddress)
+        addTdToTr(tr, soundDevice.status)
+        addTdToTr(tr, soundDevice.mode)
+        addTdToTr(tr, soundDevice.volume)
+        addTdToTr(tr, soundDevice.track)
+
+        addControlsToTr(tr, soundDevice.ipAddress, soundDevice.url)
 
 
         tableElement.appendChild(tr)
@@ -75,8 +79,8 @@ function updateControls(soundDevices) {
  * @param {string} ipAddress - ipAddress of sound device
  */
 function setDisabledStatusControlButtons(isDisabled, ipAddress) {
-    //todo split button
-    document.getElementById(`play-pause-${ipAddress}`).disabled = isDisabled
+    document.getElementById(`stop-${ipAddress}`).disabled = isDisabled
+    document.getElementById(`play-${ipAddress}`).disabled = isDisabled
     document.getElementById(`volume-bar-${ipAddress}`).disabled = isDisabled
 }
 
@@ -84,8 +88,9 @@ function setDisabledStatusControlButtons(isDisabled, ipAddress) {
  * Adds the controls elements to assigned table's row
  * @param {HTMLTableRowElement} tr - table row element to add controls
  * @param {string} ipAddress - ip address of sound device
+ * @param {string} url - url of track
  */
-function addControlsToTr(tr, ipAddress) {
+function addControlsToTr(tr, ipAddress, url) {
     let tdControls = document.createElement('td')
 
     let divControls = document.createElement('div')
@@ -95,15 +100,21 @@ function addControlsToTr(tr, ipAddress) {
     let divButtons = document.createElement('div')
     divControls.appendChild(divButtons)
 
-
-    //TODO split button
-    let buttonPlayPause = document.createElement('button')
-    buttonPlayPause.className = "play-pause"
-    buttonPlayPause.id = `play-pause-${ipAddress}`
-    buttonPlayPause.addEventListener('click', function () {
-        pausePlay(ipAddress)
+    let buttonPlay = document.createElement('button')
+    buttonPlay.className = 'play'
+    buttonPlay.id = `play-${ipAddress}`
+    buttonPlay.addEventListener('click', function () {
+        playUrl(ipAddress, url)
     })
-    divButtons.appendChild(buttonPlayPause)
+    divButtons.appendChild(buttonPlay)
+
+    let buttonStop = document.createElement('button')
+    buttonStop.className = 'stop'
+    buttonStop.id = `stop-${ipAddress}`
+    buttonStop.addEventListener('click', function () {
+        stopPlaying(ipAddress)
+    })
+    divButtons.appendChild(buttonStop)
 
     let divVolume = document.createElement('div')
     divVolume.className = 'div-volume'

@@ -4,7 +4,7 @@
  * @returns {Promise<string>} - status of sound device
  */
 async function getConnectionStatus(ipAddress) {
-    let url = getRequestUrl(ipAddress, 'wlanGetConnectState')
+    let url = getRequestUrl(ipAddress, 'wlanGetConnectState', {})
     try {
         return await sendHttpRequest(url, ipAddress)
     } catch (err) {
@@ -18,7 +18,7 @@ async function getConnectionStatus(ipAddress) {
  * @returns {Promise<PlayerStatus>} - for details look https://developer.arylic.com/httpapi/#playback-status
  */
 async function getPlaybackStatus(ipAddress) {
-    let url = getRequestUrl(ipAddress, 'getPlayerStatus')
+    let url = getRequestUrl(ipAddress, 'getPlayerStatus', {})
     try {
         let playerStatus = await sendHttpRequest(url, ipAddress)
         playerStatus.mode = getPlaybackModeName(playerStatus.mode)
@@ -89,10 +89,22 @@ function fromHexToString(hexString) {
     return str
 }
 
+/**
+ * Play the track by url
+ * @param {string} ipAddress - ip address of sound device
+ * @param {string} urlOfTrack - url of track to play
+ */
+function playUrl(ipAddress, urlOfTrack) {
+    let url = getRequestUrl(ipAddress, `setPlayerCmd:play:${urlOfTrack}`, {})
+    sendHttpRequest(url, 'GET')
+}
 
-//todo split
-function pausePlay(ipAddress) {
-    let url = getRequestUrl(ipAddress, 'setPlayerCmd:onepause')
+/**
+ * Stops the current track
+ * @param {string} ipAddress - ip address of sound device
+ */
+function stopPlaying(ipAddress) {
+    let url = getRequestUrl(ipAddress, 'setPlayerCmd:stop', {})
     sendHttpRequest(url, 'GET')
 }
 
@@ -102,7 +114,7 @@ function pausePlay(ipAddress) {
  * @param {number} volume - volume to set in range 0..100
  */
 function changeVolume(ipAddress, volume) {
-    let url = getRequestUrl(ipAddress, `setPlayerCmd:vol:${volume}`)
+    let url = getRequestUrl(ipAddress, `setPlayerCmd:vol:${volume}`, {})
     sendHttpRequest(url, 'GET')
 }
 

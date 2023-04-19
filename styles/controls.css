@@ -11,8 +11,12 @@ button {
     background-image: url("../img/prev.png");
 }
 
-.play-pause {
-    background-image: url("../img/pause-play.png");
+.play {
+    background-image: url("../img/play.png");
+}
+
+.stop {
+    background-image: url("../img/stop.png");
 }
 
 .next {
