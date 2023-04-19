@@ -32,7 +32,7 @@ function updateTable(soundDevices, tableId) {
 }
 
 function clearTable(tableId) {
-    let table = document.getElementById(tableId); // replace "myTable" with the ID of your table
+    let table = document.getElementById(tableId);
     let rows = table.getElementsByTagName("tr");
     for (let i = rows.length - 1; i > 0; i--) {
         table.deleteRow(i);
@@ -52,9 +52,8 @@ function updateControls(soundDevices) {
 }
 
 function setDisabledStatusControlButtons(isDisabled, ipAddress) {
-    document.getElementById(`prev-${ipAddress}`).disabled = isDisabled
+    //todo split button
     document.getElementById(`play-pause-${ipAddress}`).disabled = isDisabled
-    document.getElementById(`next-${ipAddress}`).disabled = isDisabled
     document.getElementById(`volume-bar-${ipAddress}`).disabled = isDisabled
 }
 
@@ -68,14 +67,8 @@ function addControlsToTr(tr, ipAddress) {
     let divButtons = document.createElement('div')
     divControls.appendChild(divButtons)
 
-    let buttonPlayPrevious = document.createElement('button')
-    buttonPlayPrevious.className = "previous"
-    buttonPlayPrevious.id = `prev-${ipAddress}`
-    buttonPlayPrevious.addEventListener('click', function () {
-        playPrevious(ipAddress)
-    })
-    divButtons.appendChild(buttonPlayPrevious)
 
+    //TODO split button
     let buttonPlayPause = document.createElement('button')
     buttonPlayPause.className = "play-pause"
     buttonPlayPause.id = `play-pause-${ipAddress}`
@@ -83,14 +76,6 @@ function addControlsToTr(tr, ipAddress) {
         pausePlay(ipAddress)
     })
     divButtons.appendChild(buttonPlayPause)
-
-    let buttonPlayNext = document.createElement('button')
-    buttonPlayNext.className = "next"
-    buttonPlayNext.id = `next-${ipAddress}`
-    buttonPlayNext.addEventListener('click', function () {
-        playNext(ipAddress)
-    })
-    divButtons.appendChild(buttonPlayNext)
 
     let divVolume = document.createElement('div')
     divVolume.className = 'div-volume'
