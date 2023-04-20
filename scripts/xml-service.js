@@ -4,10 +4,9 @@
  * @returns {Promise<Document>}
  */
 async function getXmlDomFromFile(filePath) {
-    let xmlData = await fetch(filePath).then( async (response) => {
-        return await response.text();
-    })
+    let response = await fetch(filePath)
 
+    let xmlData = await response.text()
     let parse = new DOMParser()
     return parse.parseFromString(xmlData, 'application/xml')
 }
@@ -21,7 +20,10 @@ async function getXmlDomFromFile(filePath) {
 function getDataFromXmlDom(xmlDom, selectors) {
     let data = []
 
+    console.log(xmlDom)
+
     let xmlNodeList = xmlDom.querySelectorAll(selectors)
+
     xmlNodeList.forEach(xmlNode => {
         for (let i = 0; i < xmlNode.children.length; i++) {
             let xmlNodeChild = xmlNode.children[i]
