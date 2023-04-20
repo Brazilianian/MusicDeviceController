@@ -167,6 +167,10 @@ function sendHttpRequest(url, httpType) {
         const xhr = new XMLHttpRequest()
         xhr.open(httpType, url)
 
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+        xhr.setRequestHeader('Access-Control-Allow-Methods', '*');
+        xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+
         xhr.onload = function () {
             if (xhr.status >= 200 && xhr.status <= 299) {
                 resolve(xhr.response)
