@@ -180,5 +180,7 @@ function sendHttpRequest(url, httpType) {
         }
 
         xhr.send()
+
+        console.log(`Sent http request to ${url}`)
     })
 }
