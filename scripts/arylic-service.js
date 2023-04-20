@@ -35,42 +35,33 @@ async function getPlaybackStatus(ipAddress) {
     }
 }
 
+const playbackMode = {
+    0: "Idling",
+    1: "Airplay streaming",
+    2: "DLNA streaming",
+    10: "Playing network content",
+    11: "Playing from local USB disk",
+    20: "Playback start by HTTP API",
+    31: "Spotify content streaming",
+    40: "Line-in input mode",
+    41: "Bluetooth input mode",
+    43: "Optical input mode",
+    47: "Line-in #2 input mode",
+    51: "USB DAC input mode",
+    99: "The device is a guest in a Multiroom Zone",
+}
+
 /**
  * Return the playback mode's name by it number
  * @param {number} number
  * @returns {string}
  */
 function getPlaybackModeName(number) {
-    switch (number) {
-        case 0:
-            return "Idling"
-        case 1:
-            return "Airplay streaming"
-        case 2:
-            return "DLNA streaming"
-        case 10:
-            return "Playing network content"
-        case 11:
-            return "Playing from local USB disk"
-        case 20:
-            return "Playback start by HTTP API"
-        case 31:
-            return "Spotify content streaming"
-        case 40:
-            return "Line-in input mode"
-        case 41:
-            return "Bluetooth input mode"
-        case 43:
-            return "Optical input mode"
-        case 47:
-            return "Line-in #2 input mode"
-        case 51:
-            return "USB DAC input mode"
-        case 99:
-            return "The device is a guest in a Multiroom Zone"
-        default:
-            return "Unknown mode"
+    let modeName = playbackMode[number]
+    if (typeof modeName === "undefined") {
+        modeName = "Unknown mode"
     }
+    return modeName
 }
 
 /**
@@ -115,6 +106,27 @@ function stopPlaying(ipAddress) {
  */
 function changeVolume(ipAddress, volume) {
     let url = getRequestUrl(ipAddress, `setPlayerCmd:vol:${volume}`, {})
+    sendHttpRequest(url, 'GET')
+}
+
+const inputSource = {
+    'wifi': 'Wifi Mode',
+    'line-in': 'Line Analogue Input',
+    'bluetooth': 'Bluetooth Mode',
+    'optical': 'Optical Digital Input',
+    'co-axial': 'Co-Axial Digital Input',
+    'line-in2': 'Line Analogue Input',
+    'udisk': 'UDisk Mode',
+    'PCUSB': 'USBDAC Mode'
+}
+
+/**
+ * Changes input source mode of sound device
+ * @param {string} ipAddress - ip address of sound device
+ * @param {string} mode - input source mode
+ */
+function changeInputSource(ipAddress, mode) {
+    let url = getRequestUrl(ipAddress, `setPlayerCmd:switchmode:${mode}`, {})
     sendHttpRequest(url, 'GET')
 }
 

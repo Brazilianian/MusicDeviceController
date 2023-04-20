@@ -50,3 +50,8 @@ button {
     align-items: center;
 }
 
+.select-input-source {
+    width: 100%;
+    font-size: 20px;
+    border-radius: 7px;
+}

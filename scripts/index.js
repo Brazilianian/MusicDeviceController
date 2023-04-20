@@ -8,8 +8,7 @@ function getSoundDevicesFromFileAndFillTable() {
         .then(soundDevicesFromFile => {
             soundDevices = soundDevicesFromFile
 
-            fillTableColumnsNames(TABLE_ID)
-            updateTable(soundDevices, TABLE_ID)
+            fillTableColumnsAndRows(soundDevices, TABLE_ID)
             updateControls(soundDevices)
         })
 }
@@ -17,18 +16,14 @@ function getSoundDevicesFromFileAndFillTable() {
 function getAndUpdateStatusInfo() {
     getConnectionStateInfo()
 
-    updateTableAndControls()
+    updateConnectionStatusInfo(soundDevices)
+    updateControls(soundDevices)
 }
 
 function getAndUpdatePlaybackInfo() {
     getPlaybackInfo()
 
-    updateTableAndControls()
-}
-
-function updateTableAndControls() {
-    updateTable(soundDevices, TABLE_ID)
-    updateControls(soundDevices)
+    updatePlaybackModeInfo(soundDevices)
 }
 
 async function getSoundDevicesFromFile(filePath) {

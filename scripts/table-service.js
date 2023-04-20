@@ -1,9 +1,12 @@
 /**
- * Gets table by id and adds table's headers
+ * Gets table by id and adds table's columns and rows
+ * @param {soundDevices} soundDevices - sound devices data fill in table
  * @param {string} tableId - id of table in index.html
  */
-function fillTableColumnsNames(tableId) {
+function fillTableColumnsAndRows(soundDevices, tableId) {
     let tableElement = document.getElementById(tableId)
+
+    //Add columns
     let trTitle = document.createElement('tr')
 
     addThToTr(trTitle, 'Name')
@@ -13,68 +16,46 @@ function fillTableColumnsNames(tableId) {
     addThToTr(trTitle, 'Volume')
     addThToTr(trTitle, 'Track')
     addThToTr(trTitle, 'Controls');
+    addThToTr(trTitle, 'Change Input Source');
 
     tableElement.appendChild(trTitle)
-}
 
-/**
- * Clears the table row's and fills again
- * @param {soundDevices} soundDevices - sound devices data fill in table
- * @param {string} tableId - id of table in index.html
- */
-function updateTable(soundDevices, tableId) {
-    clearTable(tableId)
-
-    let tableElement = document.getElementById(tableId)
-
+    //Add rows
     soundDevices.forEach(soundDevice => {
         let tr = document.createElement('tr')
 
-        addTdToTr(tr, soundDevice.name)
-        addTdToTr(tr, soundDevice.ipAddress)
-        addTdToTr(tr, soundDevice.status)
-        addTdToTr(tr, soundDevice.mode)
-        addTdToTr(tr, soundDevice.volume)
-        addTdToTr(tr, soundDevice.track)
+        addTdToTr(tr, soundDevice.name, `cell-name-${soundDevice.ipAddress}`)
+        addTdToTr(tr, soundDevice.ipAddress, `cell-ipAddress-${soundDevice.ipAddress}`)
+        addTdToTr(tr, soundDevice.status, `cell-status-${soundDevice.ipAddress}`)
+        addTdToTr(tr, soundDevice.mode, `cell-mode-${soundDevice.ipAddress}`)
+        addTdToTr(tr, soundDevice.volume, `cell-volume-${soundDevice.ipAddress}`)
+        addTdToTr(tr, soundDevice.track, `cell-track-${soundDevice.ipAddress}`)
 
-        addControlsToTr(tr, soundDevice.ipAddress, soundDevice.url)
-
+        addControlsToTr(tr, soundDevice.ipAddress, soundDevice.url, `cell-url-${soundDevice.ipAddress}`)
+        addChangeInputSourceToTr(tr, soundDevice.ipAddress, soundDevice.mode, `cell-input-source-${soundDevice.ipAddress}`)
 
         tableElement.appendChild(tr)
     })
 }
 
 /**
- * Clears the table
- * @param {string} tableId - id of table in index.html
- */
-function clearTable(tableId) {
-    let table = document.getElementById(tableId);
-    let rows = table.getElementsByTagName("tr");
-    for (let i = rows.length - 1; i > 0; i--) {
-        table.deleteRow(i);
-    }
-}
-
-/**
  * In dependency of sound device's status changes disabled option of controls
- * Also changes the volume bar value
  * @param {soundDevices} soundDevices
  */
 function updateControls(soundDevices) {
-
     soundDevices.forEach(soundDevice => {
         if (soundDevice.status === 'PROCESS' || soundDevice.status === 'FAIL') {
             setDisabledStatusControlButtons(true, soundDevice.ipAddress)
+            setDisabledStatusPlaybackModeSelectElement(true, soundDevice.ipAddress)
             return
         }
         setDisabledStatusControlButtons(false, soundDevice.ipAddress)
-        document.getElementById(`volume-bar-${soundDevice.ipAddress}`).value = soundDevice.volume
+        setDisabledStatusPlaybackModeSelectElement(false, soundDevice.ipAddress)
     })
 }
 
 /**
- * Changes disabled status of sound device
+ * Changes disabled status of sound device's controls buttons
  * @param {boolean} isDisabled - true/false disabled status
  * @param {string} ipAddress - ipAddress of sound device
  */
@@ -85,13 +66,46 @@ function setDisabledStatusControlButtons(isDisabled, ipAddress) {
 }
 
 /**
+ * Changes disabled status of sound device's playback mode
+ * @param {boolean} isDisabled - true/false disabled status
+ * @param {string} ipAddress - ipAddress of sound device
+ */
+function setDisabledStatusPlaybackModeSelectElement(isDisabled, ipAddress) {
+    document.getElementById(`input-source-select-${ipAddress}`).disabled = isDisabled
+}
+
+/**
+ * Updates status cell of table
+ * @param {soundDevices} soundDevices
+ */
+function updateConnectionStatusInfo(soundDevices) {
+    soundDevices.forEach(soundDevice => {
+        document.getElementById(`cell-status-${soundDevice.ipAddress}`).innerText = soundDevice.status
+    })
+}
+
+/**
+ * Updates Playback Mode, Volume, Track cells of table
+ * @param {soundDevices} soundDevices
+ */
+function updatePlaybackModeInfo(soundDevices) {
+    soundDevices.forEach(soundDevice => {
+        document.getElementById(`cell-mode-${soundDevice.ipAddress}`).innerText = soundDevice.mode
+        document.getElementById(`cell-volume-${soundDevice.ipAddress}`).innerText = soundDevice.volume
+        document.getElementById(`cell-track-${soundDevice.ipAddress}`).innerText = soundDevice.track
+    })
+}
+
+/**
  * Adds the controls elements to assigned table's row
  * @param {HTMLTableRowElement} tr - table row element to add controls
  * @param {string} ipAddress - ip address of sound device
  * @param {string} url - url of track
+ * @param {string} cellId - id of table's cell
  */
-function addControlsToTr(tr, ipAddress, url) {
+function addControlsToTr(tr, ipAddress, url, cellId) {
     let tdControls = document.createElement('td')
+    tdControls.id = cellId
 
     let divControls = document.createElement('div')
     divControls.className = 'div-controls'
@@ -142,28 +156,64 @@ function addControlsToTr(tr, ipAddress, url) {
 }
 
 /**
+ * Fill 'Change Playback Mode' column
+ * Add options to change mode by selecting it from <select> element
+ * @param {HTMLTableRowElement} tr
+ * @param {string} ipAddress - ip address of sound
+ * @param {string} sourceName - name of input source mode
+ * @param {string} cellId - id of table's cell
+ */
+function addChangeInputSourceToTr(tr, ipAddress, sourceName, cellId) {
+    let td = document.createElement('td')
+    td.id = cellId
+
+    let select = document.createElement('select')
+    select.id = `input-source-select-${ipAddress}`
+    select.className = 'select-input-source'
+    select.addEventListener('change', function (e) {
+        changeInputSource(ipAddress, e.target.value)
+    })
+
+    //input source from arylic-service
+    Object.keys(inputSource).forEach(key => {
+        let option = document.createElement('option')
+        option.value = key
+        option.text = inputSource[key]
+        option.id = `input-source-option-${key}`
+        if (sourceName === key) {
+            option.selected = true;
+        }
+        select.appendChild(option)
+    })
+
+    td.appendChild(select)
+    tr.appendChild(td)
+}
+/**
  * Create table's cell and adds to row
  * @param {HTMLTableRowElement} tr
- * @param {string} thName
+ * @param {string} thText
  * @returns {HTMLTableRowElement}
  */
-function addThToTr(tr, thName) {
+function addThToTr(tr, thText) {
     let th = document.createElement('th')
-    th.innerText = thName
+    th.innerText = thText
     tr.appendChild(th)
 
     return tr
 }
 
 /**
- *
+ * Add table data to row
  * @param {HTMLTableRowElement} tr
- * @param {string} tdName
+ * @param {string} tdText - text of table's cell
+ * @param {string} cellId - id of table's cell
  * @returns {HTMLTableRowElement}
  */
-function addTdToTr(tr, tdName) {
+function addTdToTr(tr, tdText, cellId) {
     let td = document.createElement('td')
-    td.innerText = tdName
+    td.innerText = tdText
+    td.id = cellId
     tr.appendChild(td)
 
     return tr

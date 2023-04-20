@@ -3,8 +3,7 @@ table {
     border-radius: 10px;
     width: 90%;
     padding: 2px;
-    color: white;
-    background-color: black;
+    background-color: #8f8f8f;
 }
 
 th, td {
@@ -18,9 +17,9 @@ td {
 }
 
 th {
-    background-color: #838383;
+    background-color: #6c6b6b;
 }
 
 tr:nth-child(even) {
-    background-color: #494747;
+    background-color: #3b3b3b;
 }
