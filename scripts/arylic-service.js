@@ -164,7 +164,7 @@ function getRequestUrl(ipAddress, commandName, commandOptions) {
  */
 function sendHttpRequest(url, httpType) {
     return new Promise((resolve, reject) => {
-        fetch(url, {mode: 'cors'})
+        fetch(url, {mode: 'no-cors'})
             .then(response => {
                 if (response.ok) {
                     console.log("ok")
