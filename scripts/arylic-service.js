@@ -164,27 +164,20 @@ function getRequestUrl(ipAddress, commandName, commandOptions) {
  */
 function sendHttpRequest(url, httpType) {
     return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
-        xhr.open(httpType, url)
-
-        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-        xhr.setRequestHeader('Access-Control-Allow-Methods', '*');
-        xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
-
-        xhr.onload = function () {
-            if (xhr.status >= 200 && xhr.status <= 299) {
-                resolve(xhr.response)
-            } else {
-                reject(xhr.response)
-            }
-        }
-
-        xhr.onerror = function () {
-            reject(`Network error while trying to send ${httpType} request to ${url}`)
-        }
-
-        xhr.send()
-
+        fetch(url, {mode: 'cors'})
+            .then(response => {
+                if (response.ok) {
+                    console.log("ok")
+                    resolve(response)
+                } else {
+                    console.log(response)
+                    reject(response)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+                reject(err)
+            })
         console.log(`Sent http request to ${url}`)
     })
 }

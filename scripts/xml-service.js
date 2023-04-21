@@ -20,8 +20,6 @@ async function getXmlDomFromFile(filePath) {
 function getDataFromXmlDom(xmlDom, selectors) {
     let data = []
 
-    console.log(xmlDom)
-
     let xmlNodeList = xmlDom.querySelectorAll(selectors)
 
     xmlNodeList.forEach(xmlNode => {
