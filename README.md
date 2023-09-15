@@ -10,7 +10,7 @@ This application uses HTTP requests that sends to devices. See [Arylic Documenta
 
 ### How to use it?
 To start using the appication, you need to download zip file and change `sound-devices.xml`. 
-- `Ip Address` of sound device (don't forget to add port, if you user other than `80`).
+- `Ip Address` of sound device (don't forget to add port, if you use other than `80`).
 - `Url` of track that will be played. (f.e. `http://track/which/will/played`).
 - `Name` of sound device that will be shown in the table.
 
